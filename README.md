@@ -24,3 +24,4 @@ python manage.py runserver
 Routes:
 
 Go to `localhost:8000/api`, there you will see all the endpoints of the Api.
+
