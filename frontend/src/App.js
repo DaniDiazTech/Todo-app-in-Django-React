@@ -1,57 +1,103 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 
+const App = () => {
 
-class App extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            todoList: [],
-            activeItem: {
+    const [task, setTask] = useState({
+        id: null,
+        nameTask: '',
+        description: '',
+        completed: false,
+        editing: false,
+    })
+
+    const [taskList, setaskList] = useState([])
+
+    const handleInputChange = ({ target }) => {
+        const { name, value } = target
+        setTask({
+            ...task,
+            [name]: value
+        })
+    }
+
+    const getTask = async () => {
+        try {
+            const url = "http://127.0.0.1:8000/api/task-list/"
+            const response = await fetch(url)
+            const data = await response.json()
+            setaskList(data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getTask()
+    }, [])
+
+    // Send data
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const url = "http://127.0.0.1:8000/api/task-create/"
+        fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(task)
+        }).then(
+            getTask(),
+            setTask({
                 id: null,
-                title: '',
+                nameTask: '',
                 description: '',
                 completed: false,
-            },
-            editing: false,
-        }
-        this.fetchTasks = this.fetchTasks.bind(this)
+                editing: false,
+            })
+        ).catch(error=>console.error(error))
     }
 
-    componentWillMount(){
-        this.fetchTasks()
-    }
-
-    fetchTasks(){
-        console.log("fetching ..")
-    }
-
-    render() {
-        return (
-            <div className="container">
-                <div id="task-container">
-                    <div id="form-wrapper">
-                        <form id="form">
-                            <div className="flex-wrapper">
-                                <div style={{ flex: 6 }}>
-                                    <input className="form-control" id="title" type="text" placeholder="Add Task" />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <input className="btn btn-grad" id="submit" type="submit" name="add" value="Add" />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="list-wrapper">
+   
 
 
-                    </div>
+    return (
+        <div className="container mt-2">
+            <form className="container-fluid" onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        name="nameTask"
+                        className="form-control"
+                        placeholder="Task name"
+                        value={task.nameTask}
+                        onChange={handleInputChange}
+                    />
                 </div>
-            </div>
-
-        )
-    }
-
+                <div className="mb-3">
+                    <textarea
+                        className="form-control"
+                        name="description"
+                        placeholder="Task description"
+                        rows="3"
+                        value={task.description}
+                        onChange={handleInputChange}
+                    ></textarea>
+                </div>
+                <button className="btn btn-primary">Submit</button>
+            </form>
+            {
+                taskList.map(({ id, nameTask, description}) => (
+                   <div key={id} className="border m-2">
+                        <p>title: {nameTask}</p>
+                    <p>description: {description}</p>
+                    <button className="btn btn-primary mr-3">Editar</button>
+                    <button className="btn btn-danger">Eliminar</button>
+                   </div>
+                ))
+            }
+        </div>
+    )
 }
 
 export default App;
