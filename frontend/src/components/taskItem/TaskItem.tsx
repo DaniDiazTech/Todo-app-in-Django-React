@@ -43,17 +43,35 @@ const TaskItem = ({ id, nameTask, description, complete }: TaskItemProps) => {
   };
 
   return (
-    <div key={id} className="border m-2">
-      {complete ? <s>title: {nameTask}</s> : <p>title: {nameTask}</p>}
-      <button
-        className="btn btn-primary mr-3"
-        onClick={() => handleUpdate(id, nameTask, description)}
-      >
-        Editar
-      </button>
-      <button className="btn btn-danger" onClick={() => handleDelete(id)}>
-        Eliminar
-      </button>
+    <div className="card my-3 animate__animated  animate__bounceIn" key={id}>
+      <div className="card-content">
+        <div className="card-body">
+          <div className="media d-flex">
+            <div className="media-body text-left">
+              <h3 className="primary">
+                {complete ? <s> {nameTask}</s> : <p> {nameTask}</p>}
+              </h3>
+              <span>
+                <p>{description}</p>
+              </span>
+            </div>
+            <div className="align-self-center">
+              <button
+                className="btn btn-primary mr-3"
+                onClick={() => handleUpdate(id, nameTask, description)}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDelete(id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

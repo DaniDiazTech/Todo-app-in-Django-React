@@ -17,10 +17,9 @@ const App = () => {
       .catch((e) => console.warn(e));
   }, []);
 
-  console.log(taskList);
   return (
     <div className="container mt-2">
-      <h1 className="my-2">Task app</h1>
+      <h1 className="my-2 text-center primary">Task app</h1>
       <Form />
       <div className="container d-flex justify-content-center align-items-center">
         {taskList.loading ? (
@@ -36,6 +35,14 @@ const App = () => {
                 complete={complete}
               />
             ))}
+
+            {taskList.data.length < 1 && (
+              <div className="container h-100">
+                <p className="mt-5 primary text-center fs-2">
+                  Hurray! You don't have tasks yet
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>

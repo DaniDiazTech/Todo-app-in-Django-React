@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test on <App /> Should render component 1`] = `
+<div
+  className="container mt-2"
+>
+  <h1
+    className="my-2 text-center primary"
+  >
+    Task app
+  </h1>
+  <Memo(Form) />
+  <div
+    className="container d-flex justify-content-center align-items-center"
+  >
+    <Spin />
+  </div>
+</div>
+`;
