@@ -1,10 +1,11 @@
-import { useEffect, useState, createContext } from 'react';
-import { getData } from './helpers/getData';
+import ToDoProvider, { ToDoContext } from './context/ToDoProvider';
 import { TaskItem, Form, Spin } from './components';
-import ToDoProvider from './context/ToDoProvider';
+import { useContext, useEffect } from 'react';
+import { getData } from './helpers/getData/getData';
 
 const App = () => {
-  
+  const { taskList, setTaskList } = useContext(ToDoContext);
+
   useEffect(() => {
     getData()
       .then((data) =>
@@ -16,24 +17,29 @@ const App = () => {
       .catch((e) => console.warn(e));
   }, []);
 
+  console.log(taskList);
   return (
-    <ToDoProvider>
-      <div className="container mt-2">
-        <h1 className="my-2">Task app</h1>
-        <Form />
-        <div className="container d-flex justify-content-center align-items-center">
-          {taskList.loading ? (
-            <Spin />
-          ) : (
-            <div className="container">
-              {taskList.data.map(({ id, nameTask }) => (
-                <TaskItem key={id} id={id} nameTask={nameTask} />
-              ))}
-            </div>
-          )}
-        </div>
+    <div className="container mt-2">
+      <h1 className="my-2">Task app</h1>
+      <Form />
+      <div className="container d-flex justify-content-center align-items-center">
+        {taskList.loading ? (
+          <Spin />
+        ) : (
+          <div className="container">
+            {taskList.data.map(({ id, nameTask, description, complete }) => (
+              <TaskItem
+                key={id}
+                id={id}
+                nameTask={nameTask}
+                description={description}
+                complete={complete}
+              />
+            ))}
+          </div>
+        )}
       </div>
-    </ToDoProvider>
+    </div>
   );
 };
 

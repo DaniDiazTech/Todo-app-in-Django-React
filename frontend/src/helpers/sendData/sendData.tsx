@@ -1,9 +1,9 @@
-import { taskInterface } from '../interfaces/appInterfaces';
+import { taskInterface } from '../../interfaces/appInterfaces';
 
-export const sendData = async (url: string, task: taskInterface) => {
+export const sendData = async (url: string, task: taskInterface, action:string) => {
   try {
     await fetch(url, {
-      method: 'POST',
+      method: action,
       headers: {
         'Content-type': 'application/json',
       },

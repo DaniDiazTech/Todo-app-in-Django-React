@@ -1,8 +1,8 @@
 export interface taskInterface {
-  id: string | null;
+  id: null;
   nameTask: string;
   description: string;
-  completed: boolean;
+  complete: boolean;
   editing: boolean;
 }
 

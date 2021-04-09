@@ -1,19 +1,12 @@
-import React, { useContext, useState } from 'react';
-import { sendData } from '../helpers/sendData';
-import { fieldsInterface, taskInterface } from '../interfaces/appInterfaces';
-import { getData } from '../helpers/getData';
-import { ToDoContext } from '../App';
+import React, { useContext } from 'react';
+import { sendData } from '../../helpers/sendData/sendData';
+import { fieldsInterface } from '../../interfaces/appInterfaces';
+import { getData } from '../../helpers/getData/getData';
+import { ToDoContext } from '../../context/ToDoProvider';
 
 const Form = () => {
-  const { setTaskList } = useContext(ToDoContext);
-  const [task, setTask] = useState<taskInterface>({
-    id: null,
-    nameTask: '',
-    description: '',
-    completed: false,
-    editing: false,
-  });
-
+  const { setTaskList,task,setTask } = useContext(ToDoContext);
+  
   const handleInputChange = (e: any) => {
     const { name, value }: fieldsInterface = e.target;
     setTask({
@@ -24,7 +17,20 @@ const Form = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    await sendData('http://localhost:8000/api/task-create/', task);
+    
+    let url = ""
+    let action = "";
+
+    if(task.editing){
+      url = `http://localhost:8000/api/task-update/${task.id}/`
+      action = 'PUT'
+      await sendData(url, task, action);
+    }else {
+       url = 'http://localhost:8000/api/task-create/'
+       action = 'POST';
+       await sendData(url, task, action);
+    }
+  
     setTask({
       id: null,
       nameTask: '',
@@ -32,6 +38,7 @@ const Form = () => {
       completed: false,
       editing: false,
     });
+
     getData().then(data => setTaskList({
       data,
       loading: false
@@ -39,7 +46,7 @@ const Form = () => {
   };
 
   return (
-    <form className="container-fluid" onSubmit={handleSubmit}>
+    <form className="container-fluid" onSubmit={ handleSubmit }>
       <div className="mb-3">
         <input
           type="text"
@@ -59,7 +66,7 @@ const Form = () => {
           onChange={handleInputChange}
         ></textarea>
       </div>
-      <button className="btn btn-primary">Submit</button>
+      <button className="btn btn-primary">{task.editing ? 'Edit'  : 'Submit'}</button>
     </form>
   );
 };

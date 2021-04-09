@@ -1,30 +1,52 @@
-import React, { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useState } from 'react';
+import { taskInterface } from '../interfaces/appInterfaces';
 
-const initialState = {
-  taskList: [],
-  setTaskList: (state:any) => void
-}
+export const ToDoContext = createContext({
+  task: {
+    id: null,
+    nameTask: '',
+    description: '',
+    complete: false,
+    editing: false,
+  },
+  setTask: (state: any) => {},
+  taskList: {
+    data: [],
+    loading: true,
+  },
+  setTaskList: (state: any) => {},
+});
 
-const ToDoContext = createContext(initialState);
-    
 type ToDoProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
-const ToDoProvider = ({children}:ToDoProviderProps) => {
-    const [taskList, setTaskList] = useState({
-      data: [],
-      loading: true,
-    });
+const ToDoProvider = ({ children }: ToDoProviderProps) => {
+  const [taskList, setTaskList] = useState({
+    data: [],
+    loading: true,
+  });
 
-    return (
-       <ToDoContext.Provider value={{
-         taskList,
-         setTaskList
-       }}>
-         {children}
-       </ToDoContext.Provider>
-    )
-}
+  const [task, setTask] = useState<taskInterface>({
+    id: null,
+    nameTask: '',
+    description: '',
+    complete: false,
+    editing: false,
+  });
 
-export default React.memo(ToDoProvider);
+  return (
+    <ToDoContext.Provider
+      value={{
+        task,
+        setTask,
+        taskList,
+        setTaskList,
+      }}
+    >
+      {children}
+    </ToDoContext.Provider>
+  );
+};
+
+export default ToDoProvider;

@@ -1,12 +1,10 @@
-import Form from './Form'
-import Modal from './Modal'
-import Spin from './Spin'
-import TaskItem from './TaskItem'
+import Form from './form/Form'
+import Spin from './spin/Spin'
+import TaskItem from './taskItem/TaskItem'
 
 
 export {
     Form,
-    Modal,
     Spin,
     TaskItem
 }
